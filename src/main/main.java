@@ -121,6 +121,26 @@ public abstract class main {
 				trainMatrix.itemCount(),  testRatings.size(), newRatings);
 	}
 	
+	//we need to parse all user hash and set each one id 
+	public static HashMap<String,Integer> parseUserName(String ratingFile) throws IOException{
+		HashMap<String,Integer> userIds = new HashMap<String,Integer> (); 
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(new FileInputStream(ratingFile)));
+		String line;
+		int i = 0; 
+		while((line = reader.readLine()) != null) {
+			String[] arr = line.split(",");
+			if ((userIds.isEmpty()) || !userIds.containsValue(arr[0])){
+				userIds.put(arr[0],i);
+				i++;
+			}
+		}
+		reader.close();
+		System.out.println("done parsing usernames!");
+		return userIds;
+		
+	}
+	
 	/**
 	 *  Each line of .rating file is: userID\t itemID\t score\t timestamp.
 	 *  userID starts from 0 to num_user-1
@@ -440,11 +460,11 @@ public abstract class main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String dataset ="hanwang-data/amazon_books_filter.rating";
-		deduplicate(dataset);
+		//String dataset ="hanwang-data/amazon_books_filter.rating";
+		//deduplicate(dataset);
 		
-		//String dataset = "data/yelp.rating";
-		//ReadRatings_HoldOneOut("data/yelp.rating");
+		String dataset = "data/yelp.rating";
+		ReadRatings_HoldOneOut("data/yelp.rating");
 		
 		//FilterRatingsWithThreshold(dataset, 10, 10);
 		//DatasetStatistics(dataset);

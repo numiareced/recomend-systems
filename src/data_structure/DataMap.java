@@ -87,7 +87,6 @@ public class DataMap<Key extends Comparable<Key>, Val> implements Iterable<Key>,
 	 * 
 	 * @return The Iterator instance for the map.
 	 */
-	@Override
 	public Iterator<Key> iterator() {
 		return map.keySet().iterator();
 	}
