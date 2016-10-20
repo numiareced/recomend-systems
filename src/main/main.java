@@ -1,9 +1,11 @@
 package main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -50,6 +52,9 @@ public abstract class main {
 	
 	public static int userCount;
 	public static int itemCount;
+	
+	public static int iterCount =0;
+	
 	
 	public static void ReadRatings_GlobalSplit(String ratingFile, double testRatio)
 			throws IOException {
@@ -483,6 +488,16 @@ public abstract class main {
 		res[0] = model.hits.mean();
 		res[1] = model.ndcgs.mean();
 		res[2] = model.precs.mean();
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter("data/mydata.csv", true));
+			 bw.write(name + ";"+ iterCount  + ";" +res[0] + ";" + res[1]);
+			 bw.newLine();
+			 bw.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		System.out.printf("%s\t <hr, ndcg, prec>:\t %.4f\t %.4f\t %.4f [%s]\n", 
 				name, res[0], res[1], res[2],
 				Printer.printTime(System.currentTimeMillis() - start));

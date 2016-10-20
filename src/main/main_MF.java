@@ -16,10 +16,10 @@ public class main_MF extends main {
 		String dataset_name = "testdata";
 		String method = "FastALS";
 		double w0 = 10;
-		boolean showProgress = false;
+		boolean showProgress = true;
 		boolean showLoss = true;
 		int factors = 64;
-		int maxIter = 500;
+		int maxIter = 100;
 		double reg = 0.01;
 		double alpha = 0.75;
 		
