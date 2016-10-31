@@ -15,7 +15,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -127,25 +130,39 @@ public abstract class main {
 	}
 	
 	//we need to parse all user hash and set each one id 
-	public static HashMap<String,Integer> parseUserName(String ratingFile) throws IOException{
-		HashMap<String,Integer> userIds = new HashMap<String,Integer> (); 
+	public static void parseUserName(String ratingFile) throws IOException{
+		LinkedHashMap<String,Integer> userIds = new LinkedHashMap<String,Integer> ();
+		LinkedHashMap<String,Integer> items = new LinkedHashMap<String,Integer> ();
+		//ArrayList<String> items = new ArrayList<String>();
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(new FileInputStream(ratingFile)));
 		String line;
 		int i = 0; 
+		int j =0; 
 		while((line = reader.readLine()) != null) {
 			String[] arr = line.split(",");
-			if ((userIds.isEmpty()) || !userIds.containsValue(arr[0])){
+			if (!userIds.containsKey(arr[0])){
 				userIds.put(arr[0],i);
 				i++;
 			}
+			if (!items.containsKey(arr[1])){
+				items.put(arr[1],j);
+				j++;
+			}
+
 		}
 		reader.close();
 		System.out.println("done parsing usernames!");
-		return userIds;
+		
+		//System.out.println(userIds.toString());
+		System.out.println("user count:" + userIds.size());
+		System.out.println("item count:" +items.size());
+
+		Rating.userIds = userIds;
+		Rating.ItemIds = items; 
 		
 	}
-	
+
 	/**
 	 *  Each line of .rating file is: userID\t itemID\t score\t timestamp.
 	 *  userID starts from 0 to num_user-1
@@ -173,6 +190,7 @@ public abstract class main {
 			reader.close();
 			userCount ++;
 			itemCount ++;
+			//itemCount = Rating.itemCount;
 			assert userCount == user_ratings.size();
 			
 			// Step 2. Sort the ratings of each user by time (small->large).
@@ -508,6 +526,16 @@ public abstract class main {
 	public static void evaluate_model_online(TopKRecommender model, String name, int interval) {
 		long start = System.currentTimeMillis();
 		model.evaluateOnline(testRatings, interval);
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter("data/bronline.csv", true));
+			 bw.write(name + ";"+ iterCount  + ";" +model.hits.mean() + ";" + model.ndcgs.mean());
+			 bw.newLine();
+			 bw.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		System.out.printf("%s\t <hr, ndcg, prec>:\t %.4f\t %.4f\t %.4f [%s]\n", 
 				name, model.hits.mean(), model.ndcgs.mean(), model.precs.mean(),
 				Printer.printTime(System.currentTimeMillis() - start));

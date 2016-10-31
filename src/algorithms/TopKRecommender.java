@@ -113,10 +113,10 @@ public abstract class TopKRecommender {
 		Long updateTime = (long) 0;
 		for (int i = 0; i < testCount; i ++) {
 			// Check performance per interval:
-			if (i > 0 && interval > 0 && i % interval == 0) {
+		/*	if (i > 0 && interval > 0 && i % interval == 0) {
 				System.out.printf("%d: <hr, ndcg, prec> =\t %.4f\t %.4f\t %.4f\n", 
 						i, hits.sum() / i, ndcgs.sum() / i, precs.sum() / i);
-			}
+			}*/
 			// Evaluate model of the current test rating:
 			Rating rating = testRatings.get(i);
 			double[] res = this.evaluate_for_user(rating.userId, rating.itemId);
@@ -138,13 +138,13 @@ public abstract class TopKRecommender {
 			updateTime += (System.currentTimeMillis() - start);
 		}
 		
-		System.out.println("Break down the results by number of user ratings for the test pair.");
-		System.out.printf("#Rating\t Percentage\t HR\t NDCG\t MAP\n");
-		for (int i = 0; i <= intervals; i ++) {
+//		System.out.println("Break down the results by number of user ratings for the test pair.");
+	//	System.out.printf("#Rating\t Percentage\t HR\t NDCG\t MAP\n");
+	/*	for (int i = 0; i <= intervals; i ++) {
 			System.out.printf("%d\t %.2f%%\t %.4f\t %.4f\t %.4f \n", 
 					i, (double)counts[i] / testCount * 100, 
 					hits_r[i] / counts[i], ndcgs_r[i] / counts[i], precs_r[i] / counts[i]);
-		}
+		}*/
 		
 		System.out.printf("Avg model update time per instance: %.2f ms\n", (float)updateTime/testCount);
 	}

@@ -13,7 +13,7 @@ import algorithms.ItemPopularity;
 
 public class main_MF extends main {
 	public static void main(String argv[]) throws IOException {
-		String dataset_name = "testdata";
+		String dataset_name = "newdata";
 		String method = "FastALS";
 		double w0 = 10;
 		boolean showProgress = true;
@@ -35,7 +35,7 @@ public class main_MF extends main {
 			if (argv.length > 8) alpha = Double.parseDouble(argv[8]);
 		}
 		//ReadRatings_GlobalSplit("data/" + dataset_name + ".rating", 0.1);
-		Rating.userIds = parseUserName("data/" + dataset_name + ".rating");
+		parseUserName("data/" + dataset_name + ".rating");
 		ReadRatings_HoldOneOut("data/" + dataset_name + ".rating");
 		
 		System.out.printf("%s: showProgress=%s, factors=%d, maxIter=%d, reg=%f, w0=%.2f, alpha=%.2f\n",
